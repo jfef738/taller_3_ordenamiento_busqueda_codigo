@@ -21,7 +21,7 @@
 #include "ArbolAVL.h"
 
 // TODO #06: Incluir cabecera de la STL correspondiente al árbol rojinegro
-// #include "arbolRN.h"
+#include "arbolRN.h"
 
 // TODO #11: Incluir cabecera de la STL correspondiente al montículo
 // #include "monticulo.h"
@@ -32,7 +32,7 @@ typedef std::list<std::string> TList;
 typedef ArbolAVL<std::string> TAVL;
 
 // TODO #07: Definir árbol rojinegro de tipo std::string
-// typedef arbolRN< std::string > TRN;
+typedef arbolRN< std::string > TRN;
 
 // TODO #12: Definir Montículo de tipo std::string
 // typedef monticulo< std::string > THeap;
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
   TAVL miArbolAVL;
 
   // TODO #08: Definir variable tipo árbol rojinegro.
-  // TRN miArbolRN;
+  TRN miArbolRN;
 
   // TODO #13: Definir variable tipo Montículo.
   // THeap miMonticulo;
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
   ReadStats statsRN;
   std::chrono::steady_clock::time_point t0RN = std::chrono::steady_clock::now();
-  // bool lecturaRN = LeerArbol(miArbolRN, archivo, medirCadaOperacion, statsRN);
+  bool lecturaRN = LeerArbol(miArbolRN, archivo, medirCadaOperacion, statsRN);
   std::chrono::steady_clock::time_point t1RN = std::chrono::steady_clock::now();
   double tiempoLecturaRN = std::chrono::duration<double>(t1RN - t0RN).count();
   statsRN.secs_total = tiempoLecturaRN;
@@ -142,8 +142,7 @@ int main(int argc, char *argv[])
   // TODO #05: Llamar la función que genera el recorrido en inorden del árbol AVL y lo guarda en una lista dada como parámetro.
   miArbolAVL.InOrden(inordenAVL); // muestra y guarda en lista 
   // TODO #10: Llamar la función que genera el recorrido en inorden del árbol rojinegro y lo guarda en una lista dada como parámetro.
-  // miArbolRN.inordenEnLista(inordenRN);
-
+  miArbolRN.InOrden(inordenRN);
   // TODO #15: Llamar la función que genera el recorrido en inorden del montículo y lo guarda en una lista dada como parámetro.
   // miMonticulo.inordenEnLista(inordenHeap);
 
@@ -198,6 +197,12 @@ int main(int argc, char *argv[])
   // } else {
   //   std::cout << " ==> No hay coincidencia total entre las tres estructuras.\n";
   // }
+
+  ImprimirResumen("ESTADÍSTICAS ÁRBOL AVL", statsAVL, medirCadaOperacion);
+  
+  ImprimirResumen("ESTADÍSTICAS ÁRBOL ROJO-NEGRO", statsRN, medirCadaOperacion);
+  
+  // ImprimirResumen("ESTADÍSTICAS MONTÍCULO", statsHeap, medirCadaOperacion);
 
   return (0);
 }
