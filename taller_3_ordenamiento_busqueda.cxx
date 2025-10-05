@@ -24,7 +24,7 @@
 #include "arbolRN.h"
 
 // TODO #11: Incluir cabecera de la STL correspondiente al montículo
-// #include "monticulo.h"
+#include "monticulo.h"
 
 typedef std::list<std::string> TList;
 
@@ -35,7 +35,7 @@ typedef ArbolAVL<std::string> TAVL;
 typedef arbolRN< std::string > TRN;
 
 // TODO #12: Definir Montículo de tipo std::string
-// typedef monticulo< std::string > THeap;
+typedef Monticulo<std::string> THeap;
 
 struct ReadStats
 {
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
   TRN miArbolRN;
 
   // TODO #13: Definir variable tipo Montículo.
-  // THeap miMonticulo;
+  THeap miMonticulo;
 
   ReadStats statsAVL;
   std::chrono::steady_clock::time_point t0AVL = std::chrono::steady_clock::now();
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 
   ReadStats statsHeap;
   std::chrono::steady_clock::time_point t0Heap = std::chrono::steady_clock::now();
-  // bool lecturaHeap = LeerArbol(miMonticulo, archivo, medirCadaOperacion, statsHeap);
+  bool lecturaHeap = LeerArbol(miMonticulo, archivo, medirCadaOperacion, statsHeap);
   std::chrono::steady_clock::time_point t1Heap = std::chrono::steady_clock::now();
   double tiempoLecturaHeap = std::chrono::duration<double>(t1Heap - t0Heap).count();
   statsHeap.secs_total = tiempoLecturaHeap;
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
   // TODO #10: Llamar la función que genera el recorrido en inorden del árbol rojinegro y lo guarda en una lista dada como parámetro.
   miArbolRN.InOrden(inordenRN);
   // TODO #15: Llamar la función que genera el recorrido en inorden del montículo y lo guarda en una lista dada como parámetro.
-  // miMonticulo.inordenEnLista(inordenHeap);
+  miMonticulo.inorden(inordenHeap);
 
   std::size_t sizeAVL = inordenAVL.size();
   std::size_t sizeRN = inordenRN.size();
@@ -173,37 +173,36 @@ int main(int argc, char *argv[])
   */
 
   // TODO #16: Crear iteradores para recorrer cada una de las estructuras lineales
-  // TList::iterator itAVL  = inordenAVL.begin();
-  // TList::iterator itRN   = inordenRN.begin();
-  // TList::iterator itHeap = inordenHeap.begin();
+  TList::iterator itAVL  = inordenAVL.begin();
+  TList::iterator itRN   = inordenRN.begin();
+  TList::iterator itHeap = inordenHeap.begin();
 
   // TODO #17: Recorrer las estructuras lineales y comparar elemento a elemento la igualdad o desigualdad
-  // bool todosIguales = true;
-  // for (std::size_t i = 0; i < minSize; ++i, ++itAVL, ++itRN, ++itHeap) {
-  //   if (!(*itAVL == *itRN && *itRN == *itHeap)) {
-  //     std::cout << " Diferencia en la posicion " << i
-  //               << " | AVL: " << *itAVL
-  //               << " | RN: "  << *itRN
-  //               << " | Heap: "<< *itHeap << "\n";
-  //     todosIguales = false;
-  //   }
-  // }
+  bool todosIguales = true;
+  for (std::size_t i = 0; i < minSize; ++i, ++itAVL, ++itRN, ++itHeap) {
+    if (!(*itAVL == *itRN && *itRN == *itHeap)) {
+       std::cout << " Diferencia en la posicion " << i
+                 << " | AVL: " << *itAVL
+                 << " | RN: "  << *itRN
+                 << " | Heap: "<< *itHeap << "\n";
+      todosIguales = false;
+    }
+  }
 
   // TODO #18: Informar si los árboles coinciden en la totalidad de los elementos teniendo en cuenta su posición
-  // if (todosIguales && sizeAVL == sizeRN && sizeRN == sizeHeap) {
-  //   std::cout << " ==> Coincidencia total: los tres recorridos inorden son idénticos.\n";
-  // } else if (todosIguales) {
-  //   std::cout << " ==> Coincidencia parcial: igualdad en posiciones comparadas, pero tamaños distintos.\n";
-  // } else {
-  //   std::cout << " ==> No hay coincidencia total entre las tres estructuras.\n";
-  // }
+   if (todosIguales && sizeAVL == sizeRN && sizeRN == sizeHeap) {
+     std::cout << " ==> Coincidencia total: los tres recorridos inorden son idénticos.\n";
+   } else if (todosIguales) {
+     std::cout << " ==> Coincidencia parcial: igualdad en posiciones comparadas, pero tamaños distintos.\n";
+   } else {
+     std::cout << " ==> No hay coincidencia total entre las tres estructuras.\n";
+   }
 
   ImprimirResumen("ESTADÍSTICAS ÁRBOL AVL", statsAVL, medirCadaOperacion);
   
   ImprimirResumen("ESTADÍSTICAS ÁRBOL ROJO-NEGRO", statsRN, medirCadaOperacion);
   
-  // ImprimirResumen("ESTADÍSTICAS MONTÍCULO", statsHeap, medirCadaOperacion);
-
+  ImprimirResumen("ESTADÍSTICAS MONTÍCULO", statsHeap, medirCadaOperacion);
   return (0);
 }
 
